@@ -3,8 +3,8 @@
 Repository ini digunakan untuk menyimpan semua materi, latihan, dan tugas dari course Pemrograman JavaScript ES6 di NF Academy.
 
 ## Struktur
-- pertemuan-x/ → Materi dan latihan setiap pertemuan
-- tugas-x/ → File tugas yang dikerjakan
+- pertemuan-1/ → Materi Pengantar Javascript
+- tugas-1/ → Menghitung Luas Bangun Datar
 
 ## Author
 - **Nama**: Muhammad Afif Naufal
