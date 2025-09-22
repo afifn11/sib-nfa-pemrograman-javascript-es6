@@ -5,6 +5,7 @@ Repository ini digunakan untuk menyimpan semua materi, latihan, dan tugas dari c
 ## Struktur
 - pertemuan-1/ → Materi Pengantar Javascript (tugas-1 Menghitung Luas Bangun Datar)
 - pertemuan-2/ → Stuktur Kendali If, ternary & Switch case || Looping (Tugas-2 Menghitung Total Gaji Pokok Pegawai)
+- pertemuan-3/ → Array & Function (Tugas-3 Membuat Program Manajemen Produk Toko)
 
 ## Author
 - **Nama**: Muhammad Afif Naufal
