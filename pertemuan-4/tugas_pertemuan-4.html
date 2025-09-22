@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Manajemen Transportasi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .left-section {
+            border-right: 2px solid #eee;
+            padding-right: 20px;
+        }
+
+        .right-section {
+            padding-left: 20px;
+        }
+
+        .customer-section {
+            grid-column: 1 / -1;
+            border-top: 2px solid #eee;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .left-section {
+                border-right: none;
+                padding-right: 0;
+                border-bottom: 2px solid #eee;
+                padding-bottom: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .right-section {
+                padding-left: 0;
+                padding-top: 20px;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .customer-item {
+            background: #f8f9fa;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid #007bff;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sistem Manajemen Transportasi</h1>
+
+        <div class="main-content">
+            <!-- Section Kiri: Form Tambah Kendaraan -->
+            <div class="left-section">
+                <div class="section">
+                    <h3>Tambah Kendaraan</h3>
+                    <form id="vehicleForm">
+                        <div class="form-group">
+                            <label>Jenis Kendaraan:</label>
+                            <select id="vehicleType" required>
+                                <option value="">Pilih Jenis</option>
+                                <option value="mobil">Mobil</option>
+                                <option value="motor">Motor</option>
+                                <option value="truk">Truk</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Merk:</label>
+                            <input type="text" id="vehicleMerk" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Model:</label>
+                            <input type="text" id="vehicleModel" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Nomor Plat:</label>
+                            <input type="text" id="vehiclePlat" required>
+                        </div>
+                        <button type="submit">Tambah Kendaraan</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Section Kanan: Form Sewa Kendaraan -->
+            <div class="right-section">
+                <div class="section">
+                    <h3>Sewa Kendaraan</h3>
+                    <form id="rentalForm">
+                        <div class="form-group">
+                            <label>Nama Pelanggan:</label>
+                            <input type="text" id="customerName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Nomor Telepon:</label>
+                            <input type="tel" id="customerPhone" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Pilih Kendaraan:</label>
+                            <select id="selectVehicle" required>
+                                <option value="">Pilih kendaraan tersedia</option>
+                            </select>
+                        </div>
+                        <button type="submit">Sewa Kendaraan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Bawah: Daftar Pelanggan -->
+        <div class="customer-section">
+            <div class="section">
+                <h3>Daftar Pelanggan yang Sedang Menyewa</h3>
+                <div id="customerList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Class Kendaraan
+        class Kendaraan {
+            constructor(jenis, merk, model, nomorPlat) {
+                this.jenis = jenis;
+                this.merk = merk;
+                this.model = model;
+                this.nomorPlat = nomorPlat;
+                this.tersedia = true;
+            }
+
+            getInfo() {
+                return `${this.jenis} ${this.merk} ${this.model} (${this.nomorPlat})`;
+            }
+        }
+
+        // Class Pelanggan
+        class Pelanggan {
+            constructor(nama, nomorTelepon, kendaraanDisewa) {
+                this.nama = nama;
+                this.nomorTelepon = nomorTelepon;
+                this.kendaraanDisewa = kendaraanDisewa;
+                this.tanggalSewa = new Date().toLocaleDateString('id-ID');
+            }
+
+            getInfo() {
+                return `${this.nama} (${this.nomorTelepon}) - ${this.kendaraanDisewa.getInfo()}`;
+            }
+        }
+
+        // Class Sistem Manajemen
+        class SistemManajemenTransportasi {
+            constructor() {
+                this.daftarKendaraan = [];
+                this.daftarPelanggan = [];
+            }
+
+            // Method tambah kendaraan
+            tambahKendaraan(jenis, merk, model, nomorPlat) {
+                const kendaraan = new Kendaraan(jenis, merk, model, nomorPlat);
+                this.daftarKendaraan.push(kendaraan);
+                return kendaraan;
+            }
+
+            // Method mencatat transaksi penyewaan
+            catatTransaksiSewa(nama, nomorTelepon, nomorPlatKendaraan) {
+                const kendaraan = this.daftarKendaraan.find(k => k.nomorPlat === nomorPlatKendaraan);
+                
+                if (!kendaraan || !kendaraan.tersedia) {
+                    throw new Error('Kendaraan tidak tersedia');
+                }
+
+                kendaraan.tersedia = false;
+                const pelanggan = new Pelanggan(nama, nomorTelepon, kendaraan);
+                this.daftarPelanggan.push(pelanggan);
+                return pelanggan;
+            }
+
+            // Method mendapatkan kendaraan tersedia
+            getKendaraanTersedia() {
+                return this.daftarKendaraan.filter(k => k.tersedia);
+            }
+
+            // Method mendapatkan daftar pelanggan yang sedang menyewa
+            getDaftarPelangganMenyewa() {
+                return this.daftarPelanggan;
+            }
+        }
+
+        // Inisialisasi sistem
+        const sistem = new SistemManajemenTransportasi();
+
+        // Fungsi update opsi kendaraan
+        function updateVehicleOptions() {
+            const select = document.getElementById('selectVehicle');
+            const availableVehicles = sistem.getKendaraanTersedia();
+            
+            select.innerHTML = '<option value="">Pilih kendaraan tersedia</option>';
+            
+            availableVehicles.forEach(vehicle => {
+                const option = document.createElement('option');
+                option.value = vehicle.nomorPlat;
+                option.textContent = vehicle.getInfo();
+                select.appendChild(option);
+            });
+        }
+
+        // Fungsi tampilkan daftar pelanggan
+        function displayCustomers() {
+            const container = document.getElementById('customerList');
+            const customers = sistem.getDaftarPelangganMenyewa();
+
+            if (customers.length === 0) {
+                container.innerHTML = '<p><em>Tidak ada pelanggan yang sedang menyewa kendaraan</em></p>';
+                return;
+            }
+
+            container.innerHTML = customers.map(customer => `
+                <div class="customer-item">
+                    <strong>Nama:</strong> ${customer.nama}<br>
+                    <strong>No. Telepon:</strong> ${customer.nomorTelepon}<br>
+                    <strong>Kendaraan:</strong> ${customer.kendaraanDisewa.getInfo()}<br>
+                    <strong>Tanggal Sewa:</strong> ${customer.tanggalSewa}
+                </div>
+            `).join('');
+        }
+
+        // Event listener form tambah kendaraan
+        document.getElementById('vehicleForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const jenis = document.getElementById('vehicleType').value;
+            const merk = document.getElementById('vehicleMerk').value;
+            const model = document.getElementById('vehicleModel').value;
+            const plat = document.getElementById('vehiclePlat').value;
+
+            sistem.tambahKendaraan(jenis, merk, model, plat);
+            
+            this.reset();
+            updateVehicleOptions();
+            
+            // Tampilkan pesan sukses
+            const success = document.createElement('div');
+            success.className = 'success';
+            success.textContent = 'Kendaraan berhasil ditambahkan!';
+            this.parentNode.appendChild(success);
+            setTimeout(() => success.remove(), 3000);
+        });
+
+        // Event listener form sewa kendaraan
+        document.getElementById('rentalForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nama = document.getElementById('customerName').value;
+            const telepon = document.getElementById('customerPhone').value;
+            const platKendaraan = document.getElementById('selectVehicle').value;
+
+            try {
+                sistem.catatTransaksiSewa(nama, telepon, platKendaraan);
+                
+                this.reset();
+                updateVehicleOptions();
+                displayCustomers();
+                
+                // Tampilkan pesan sukses
+                const success = document.createElement('div');
+                success.className = 'success';
+                success.textContent = 'Kendaraan berhasil disewa!';
+                this.parentNode.appendChild(success);
+                setTimeout(() => success.remove(), 3000);
+                
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        });
+
+        // Inisialisasi tampilan
+        updateVehicleOptions();
+        displayCustomers();
+    </script>
+</body>
+</html>
