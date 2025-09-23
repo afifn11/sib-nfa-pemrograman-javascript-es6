@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manajemen Produk</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f0f2f5;
+    }
+
+    .card {
+      background: #fff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      width: 400px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #1B1A55;
+      margin-bottom: 20px;
+    }
+
+    button {
+      margin: 5px;
+      padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 8px;
+      border: none;
+      background: #1B1A55;
+      color: #fff;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #535C91;
+    }
+
+    #output {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background: #f9f9f9;
+      text-align: left;
+      max-height: 200px;
+      overflow-y: auto;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Manajemen Produk</h2>
+    <button id="btnTampil">Tampilkan Produk</button>
+    <button id="btnTambah">Tambah Produk</button>
+    <button id="btnHapus">Hapus Produk</button>
+    <div id="output"></div>
+  </div>
+
+  <script>
+    // **Data Produk**
+    let produkList = [
+      { id: 1, nama: "Laptop", harga: 12000000 },
+      { id: 2, nama: "Smartphone", harga: 5000000 },
+      { id: 3, nama: "Headphone", harga: 1500000 },
+      { id: 4, nama: "Keyboard", harga: 700000 },
+      { id: 5, nama: "Monitor", harga: 3000000 }
+    ];
+
+    // **Event Handler**
+    const eventHandler = {
+      tambah: (id, nama, harga) => tambahProduk(id, nama, harga),
+      hapus: (id) => hapusProduk(id),
+      tampil: () => tampilkanProduk()
+    };
+
+    // **Menambahkan Produk dengan Spread Operator**
+    function tambahProduk(id, nama, harga) {
+      const produkBaru = { id, nama, harga };
+      produkList = [...produkList, produkBaru];
+      alert(`Produk ${nama} berhasil ditambahkan.`);
+      tampilkanProduk();
+    }
+
+    // **Menghapus Produk dengan Rest Parameter**
+    function hapusProduk(...id) {
+      produkList = produkList.filter(produk => !id.includes(produk.id));
+      alert(`Produk dengan id ${id} berhasil dihapus.`);
+      tampilkanProduk();
+    }
+
+    // **Menampilkan Produk dengan Destructuring**
+    function tampilkanProduk() {
+      const output = document.getElementById("output");
+      output.innerHTML = "<strong>Daftar Produk:</strong><br><br>";
+      produkList.forEach(({ id, nama, harga }) => {
+        output.innerHTML += `🛒 ID: ${id} <br>Nama: ${nama} <br>Harga: Rp${harga.toLocaleString()}<br><hr>`;
+      });
+    }
+
+    // **Event Listener**
+    document.getElementById("btnTampil").addEventListener("click", () => {
+      eventHandler.tampil();
+    });
+
+    document.getElementById("btnTambah").addEventListener("click", () => {
+      const id = produkList.length + 1;
+      const nama = prompt("Masukkan nama produk:");
+      const harga = parseInt(prompt("Masukkan harga produk:"), 10);
+      if (nama && harga) {
+        eventHandler.tambah(id, nama, harga);
+      }
+    });
+
+    document.getElementById("btnHapus").addEventListener("click", () => {
+      const id = parseInt(prompt("Masukkan ID produk yang ingin dihapus:"), 10);
+      if (id) {
+        eventHandler.hapus(id);
+      }
+    });
+
+    // tampilkan produk awal
+    tampilkanProduk();
+  </script>
+</body>
+</html>
