@@ -8,6 +8,7 @@ Repository ini digunakan untuk menyimpan semua materi, latihan, dan tugas dari c
 - pertemuan-3/ → Array & Function | (Tugas-3 Membuat Program Manajemen Produk Toko)
 - pertemuan-4/ → Manipulasi DOM & Object Oriented Programming (OOP) | (Tugas-4 Membuat Sistem Manajemen Transportasi)
 - pertemuan-5/ → Event & Advanced Javascript | (Tugas-5 Membuat Fitur Manajemen Produk Berbasis Javascript
+- pertemuan-6/ → Module ES6 Javascript | (Tugas-6 Implementasi Module ES6 (CRUD Sederhana dengan Array of Object)
 
 ## Author
 - **Nama**: Muhammad Afif Naufal
